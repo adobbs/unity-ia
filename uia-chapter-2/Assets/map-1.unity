@@ -385,10 +385,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   axes: 1
-  sensitivityHor: 6
-  sensitivityVert: 9
-  minimumVert: -45
-  maximumVert: 45
+  sensitivityHor: 3
+  sensitivityVert: 3
+  minimumVert: -60
+  maximumVert: 60
 --- !u!114 &395766353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -893,10 +893,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   axes: 2
-  sensitivityHor: 9
-  sensitivityVert: 9
-  minimumVert: -45
-  maximumVert: 45
+  sensitivityHor: 3
+  sensitivityVert: 3
+  minimumVert: -60
+  maximumVert: 60
 --- !u!1 &878786234
 GameObject:
   m_ObjectHideFlags: 0
