@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour {
 
@@ -11,6 +12,15 @@ public class SceneController : MonoBehaviour {
 
 	[SerializeField] private MemoryCard originalCard;
 	[SerializeField] private Sprite[] images;
+	[SerializeField] private TextMesh scoreLabel;
+	
+	private MemoryCard _firstRevealed;
+	private MemoryCard _secondRevealed;
+	private int _score = 0;
+
+	public bool canReveal {
+		get {return _secondRevealed == null;}
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -39,6 +49,10 @@ public class SceneController : MonoBehaviour {
 			}
 		}
 	}
+
+	public void Restart() {
+		SceneManager.LoadScene("Scene");
+	}
 	
 	private int[] ShuffleArray(int[] numbers) {
 		int[] newArray = numbers.Clone() as int[];
@@ -49,5 +63,27 @@ public class SceneController : MonoBehaviour {
 			newArray[r] = tmp;
 		}
 		return newArray;
+	}
+
+	public void CardRevealed(MemoryCard card) {
+		if (_firstRevealed == null) {
+			_firstRevealed = card;
+		} else {
+			_secondRevealed = card;
+			StartCoroutine(CheckMatch());
+		}
+	}
+
+	private IEnumerator CheckMatch() {
+		if (_firstRevealed.id == _secondRevealed.id) {
+			_score++;
+			scoreLabel.text = "Score: " + _score;
+		} else {
+			yield return new WaitForSeconds(.5f);
+			_firstRevealed.Unreveal();
+			_secondRevealed.Unreveal();
+		}
+		_firstRevealed = null;
+		_secondRevealed = null;
 	}
 }
