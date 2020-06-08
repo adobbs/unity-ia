@@ -16,7 +16,6 @@ public class RelativeMovement : MonoBehaviour {
 	public float minFall = -1.5f;
 
 	private float _vertSpeed;
-	private ControllerColliderHit _contact;
 
 	private CharacterController _charController;
 
@@ -45,44 +44,22 @@ public class RelativeMovement : MonoBehaviour {
 				transform.rotation, direction, rotSpeed * Time.deltaTime
 			);
 		}
-
-		bool hitGround = false;
-		RaycastHit hit;
-		if (_vertSpeed < 0 && Physics.Raycast(transform.position, Vector3.down, out hit)) {
-			float check = (_charController.height + _charController.radius) / 1.9f;
-			hitGround = hit.distance <= check;
-			// Debug.Log(check);
-		}
-		// Debug.Log(hitGround);
-		if (hitGround) {
-			// Debug.Log("Hitting ground.");
+		
+		if (_charController.isGrounded) {
 			if (Input.GetButtonDown("Jump")) {
 				_vertSpeed = jumpSpeed;
 			} else {
 				_vertSpeed = minFall;
 			}
 		} else {
-			Debug.Log("Not hitting ground.");
 			_vertSpeed += gravity * 5 * Time.deltaTime;
 			if (_vertSpeed < terminalVelocity) {
 				_vertSpeed = terminalVelocity;
 			}
-			if (_charController.isGrounded) {
-				if (Vector3.Dot(movement, _contact.normal) < 0) {
-					movement = _contact.normal * moveSpeed;
-				} else {
-					movement += _contact.normal * moveSpeed;
-				}
-			}
 		}
 		movement.y = _vertSpeed;
-		Debug.Log(movement.y);
 
 		movement *= Time.deltaTime;
 		_charController.Move(movement);
-	}
-
-	void OnControllerColliderHit(ControllerColliderHit hit) {
-		_contact = hit;
 	}
 }
