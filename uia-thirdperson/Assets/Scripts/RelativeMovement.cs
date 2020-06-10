@@ -18,10 +18,12 @@ public class RelativeMovement : MonoBehaviour {
 	private float _vertSpeed;
 
 	private CharacterController _charController;
+	private Animator _animator;
 
 	void Start() {
 		_vertSpeed = minFall;
 		_charController = GetComponent<CharacterController>();
+		_animator = GetComponent<Animator>();
 	}
 
 	void Update () {
@@ -45,17 +47,23 @@ public class RelativeMovement : MonoBehaviour {
 			);
 		}
 		
+		_animator.SetFloat("Speed", movement.sqrMagnitude);
 		if (_charController.isGrounded) {
 			if (Input.GetButtonDown("Jump")) {
 				_vertSpeed = jumpSpeed;
 			} else {
 				_vertSpeed = minFall;
+				_animator.SetBool("Jumping", false);
 			}
 		} else {
 			_vertSpeed += gravity * 5 * Time.deltaTime;
 			if (_vertSpeed < terminalVelocity) {
 				_vertSpeed = terminalVelocity;
 			}
+			// Ideally, would need some sort of check here 
+			// or find a setting to make sure this doesn't 
+			// play when the game just starts if (_contact != null)
+			_animator.SetBool("Jumping", true);
 		}
 		movement.y = _vertSpeed;
 
